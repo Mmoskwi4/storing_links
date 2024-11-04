@@ -31,18 +31,26 @@ INSTALLED_APPS += [
     'django_filters',
     'corsheaders',
     'djoser',
+    'phonenumber_field',
 ]
 
 # apps
 INSTALLED_APPS += [
     'api',
     'common',
+    'galleries',
+    'users',
 ]
+
+# Custom user model
+AUTH_USER_MODEL = 'users.User'
+AUTHENTICATION_BACKENDS = ('users.backends.AuthBackend',)
 
 # after apps
 INSTALLED_APPS +=[
     'drf_spectacular',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -92,6 +100,7 @@ DATABASES = {
     },
 }
 
+
 #######################
 # DJANGO REST FRAMEWORK
 #######################
@@ -134,7 +143,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ######################
 # LOCALIZATION
 ######################
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-RU'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
