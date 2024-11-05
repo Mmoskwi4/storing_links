@@ -41,4 +41,28 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    pass
+    old_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ('old_password', 'new_password')
+    
+    def validate(self, attrs):
+        user = self.instance
+        old_password = attrs.pop('old_password')
+        if not user.check_password(old_password):
+            raise ParseError(
+                'Проверьте правильность текущего пароля.'
+            )
+        return attrs
+
+    def validate_new_password(self, value):
+        validate_password(value)
+        return value
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('new_password')
+        instance.set_password(password)
+        instance.save()
+        return instance

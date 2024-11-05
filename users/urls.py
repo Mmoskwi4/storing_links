@@ -10,6 +10,7 @@ router = DefaultRouter()
 
 urlpatterns = [
     path('users/reg/', users.RegistrationView.as_view(), name='reg'),
+    path('users/reg/change-passwd/', users.ChangePasswordView.as_view(), name='change_passwd'),
 ]
 
 urlpatterns += path('users/', include(router.urls)),
