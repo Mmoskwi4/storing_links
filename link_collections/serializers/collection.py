@@ -15,9 +15,6 @@ class CollectionSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("Вы не можете добавлять свои ссылки в чужие коллекции.")
             else:
                 return data
-        # if 'links' in data:
-        #     validate_links_owner(data['links'], self.context['request'].user)
-        # return data
 
     class Meta:
         model = Collection

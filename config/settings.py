@@ -90,11 +90,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'storing_links',
-        'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',
-        'PORT': 5432,
+        'NAME': env.str('PG_DATABASE', 'postgres'),
+        'USER': env.str('PG_USER', 'postgres'),
+        'PASSWORD': env.str('PG_PASSWORD', 'postgres'),
+        'HOST': env.str('DB_HOST', 'localhost'),
+        'PORT': env.int('DB_PORT', '5432'),
     },
     'extra': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -154,12 +154,12 @@ DJANGO_REST_PASSWORDRESET_TOKEN_CONFIG = {
     }
 }
 # Send e-mail
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'byblikwooblik@gmail.com'
-EMAIL_HOST_PASSWORD = 'xbfybnbutrcstsmh'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
+EMAIL_BACKEND = ('django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = env.str('EMAIL_HOST')
+EMAIL_HOST_USER = env.str('EMAIL_HOST')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
+EMAIL_PORT = env.int('EMAIL_PORT')
 
 
 ######################

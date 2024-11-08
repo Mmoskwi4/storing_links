@@ -16,7 +16,9 @@ User = get_user_model()
 
 @extend_schema_view(
     post=extend_schema(
-        summary='Регистрация пользователя', tags=['Аутентификация & Авторизация']),
+        summary='Регистрация пользователя',
+        tags=['Аутентификация & Авторизация']
+    ),
 )
 class RegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
