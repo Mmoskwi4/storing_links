@@ -1,8 +1,10 @@
+import pdb
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.exceptions import ParseError
-
+from users import signals
 
 User = get_user_model()
 
@@ -66,3 +68,21 @@ class ChangePasswordSerializer(serializers.Serializer):
         instance.set_password(password)
         instance.save()
         return instance
+
+
+class ResetPasswordSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField()
+
+    class Meta:
+        model = User
+        fields = ('email',)
+
+    def validate_email(self, value):
+        email = value.lower()
+        if User.objects.filter(email=email).exists():
+            return email
+        else: 
+            ParseError(
+                'Проверьте правильность ввода почты.'
+            )
+

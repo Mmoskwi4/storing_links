@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
 
+
 from users.serializers.api import users as user_s
 
 
@@ -38,3 +39,20 @@ class ChangePasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=HTTP_204_NO_CONTENT)
+
+
+@extend_schema_view(
+    post=extend_schema(
+        request=user_s.ResetPasswordSerializer,
+        summary='Сброс Пароля',
+        tags=['Аутентификация & Авторизация']),
+)
+class ResetPasswordView(generics.CreateAPIView):
+    def post(self, request):
+        user = request.user
+        serializer = user_s.ResetPasswordSerializer(
+            instance=user, data=request.data
+            )
+        if serializer.is_valid(raise_exception=True):
+            return Response(status=HTTP_204_NO_CONTENT)
+        

@@ -32,14 +32,16 @@ INSTALLED_APPS += [
     'corsheaders',
     'djoser',
     'phonenumber_field',
+    'django_rest_passwordreset',
+    'bs4',
 ]
 
 # apps
 INSTALLED_APPS += [
     'api',
-    'common',
-    'galleries',
     'users',
+    'links',
+    'link_collections',
 ]
 
 # Custom user model
@@ -112,6 +114,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ],
 
     'DEFAULT_PARSER_CLASSES': [
@@ -138,6 +141,25 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+############################
+# DJANGO REST PASSWORD RESET
+############################
+
+DJANGO_REST_PASSWORDRESET_TOKEN_CONFIG = {
+    "CLASS": "django_rest_passwordreset.tokens.RandomStringTokenGenerator",
+    "OPTIONS": {
+        "min_length": 20,
+        "max_length": 30
+    }
+}
+# Send e-mail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'byblikwooblik@gmail.com'
+EMAIL_HOST_PASSWORD = 'xbfybnbutrcstsmh'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
 
 
 ######################
@@ -203,6 +225,7 @@ DJOSER = {
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': '#/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': False,
+    "PASSWORD_RESET_CONFIRM_URL": "reset_password/{uid}/{token}",
     'SERIALIZERS': {},
 }
 

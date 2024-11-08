@@ -3,6 +3,8 @@ from users.managers import CustomUserManager
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
+NULLABLE = {'blank': True, 'null': True}
+
 class User(AbstractUser):
     username = models.CharField(
         'Никнейм', max_length=64, unique=True, null=True, blank=True
@@ -25,3 +27,4 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.full_name} ({self.pk})'
+
