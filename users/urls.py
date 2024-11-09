@@ -11,8 +11,8 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('users/reg/', users.RegistrationView.as_view(), name='reg'),
-    path('users/reg/change-passwd/', users.ChangePasswordView.as_view(), name='change_passwd'),
-    path('users/reg/password-reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
+    path('users/reg/change_password/', users.ChangePasswordView.as_view(), name='change_passwd'),
+    path('users/reg/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 ]
 
 urlpatterns += path('users/', include(router.urls)),

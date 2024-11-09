@@ -1,37 +1,23 @@
-version: '3'
-
 services:
-
-  db:
-    image: postgres
-    env_file:
-      - .env
-    environment:
-      - POSTGRES_DB=${PG_DATABASE}
-      - POSTGRES_USER=${PG_USER}
-      - POSTGRES_PASSWORD=${PG_PASSWORD}
-    volumes:
-      - pg_data:/var/lib/postgresql/pgdata
-    ports:
-      - '5435:5432'
-    healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   app:
-    build: .
-    tty: true
-    command: >
-      bash -c "python3 manage.py migrate &&
-               python3 manage.py loaddata testdata_for_db.json &&
-               python3 manage.py runserver 0.0.0.0:8000"
+    build: ./
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes: 
+      - ./:/usr/src/app/
     ports:
       - '8000:8000'
+    env_file:
+      - ./.env.docker
     depends_on:
-      db:
-        condition: service_healthy
+      - db
 
+  db:
+    image: postgres:17
+    volumes:
+      - postgres_data:/var/lib/postgresql/pgdata
+    environment:
+      - POSTGRES_DB=storing_links
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
 volumes:
-  pg_data:
+  postgres_data:
