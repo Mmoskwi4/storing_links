@@ -9,9 +9,7 @@ environ.Env.read_env(env.str(root(), '.env'))
 BASE_DIR = root()
 
 SECRET_KEY = env.str('SECRET_KEY')
-
 DEBUG = env.bool('DEBUG', default=False)
-
 ALLOWED_HOSTS = env.str('ALLOWED_HOSTS', default='').split(' ')
 
 
@@ -187,7 +185,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = ['*']
-CORE_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 
 
 ###################
