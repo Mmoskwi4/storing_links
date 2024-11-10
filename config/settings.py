@@ -197,7 +197,7 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'OPISANIE',
     'VERSION': '1.0.0',
 
-    'SERVE_PERMISSION': [
+    'SERVE_PERMISSIONS': [
         'rest_framework.permissions.IsAuthenticated',
     ],
 
