@@ -4,33 +4,28 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.exceptions import ParseError
-from users import signals
 
 User = get_user_model()
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
-    password = serializers.CharField(
-        style={'input_type': 'password'}, write_only=True
-    )
+    password = serializers.CharField(style={"input_type": "password"}, write_only=True)
 
     class Meta:
         model = User
         fields = (
-            'id',
-            'first_name',
-            'last_name',
-            'email',
-            'password',
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "password",
         )
 
     def validate_email(self, value):
         email = value.lower()
         if User.objects.filter(email=email).exists():
-            raise ParseError(
-                'Пользователь с такой почтой уже зарегистрирован.'
-            )
+            raise ParseError("Пользователь с такой почтой уже зарегистрирован.")
         return email
 
     def validate_password(self, value):
@@ -48,15 +43,13 @@ class ChangePasswordSerializer(serializers.Serializer):
 
     class Meta:
         model = User
-        fields = ('old_password', 'new_password')
-    
+        fields = ("old_password", "new_password")
+
     def validate(self, attrs):
         user = self.instance
-        old_password = attrs.pop('old_password')
+        old_password = attrs.pop("old_password")
         if not user.check_password(old_password):
-            raise ParseError(
-                'Проверьте правильность текущего пароля.'
-            )
+            raise ParseError("Проверьте правильность текущего пароля.")
         return attrs
 
     def validate_new_password(self, value):
@@ -64,7 +57,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         return value
 
     def update(self, instance, validated_data):
-        password = validated_data.pop('new_password')
+        password = validated_data.pop("new_password")
         instance.set_password(password)
         instance.save()
         return instance
@@ -75,14 +68,11 @@ class ResetPasswordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email',)
+        fields = ("email",)
 
     def validate_email(self, value):
         email = value.lower()
         if User.objects.filter(email=email).exists():
             return email
-        else: 
-            ParseError(
-                'Проверьте правильность ввода почты.'
-            )
-
+        else:
+            ParseError("Проверьте правильность ввода почты.")
