@@ -206,8 +206,8 @@ SPECTACULAR_SETTINGS = {
     ],
 
     'SERVE_UI_SETTINGS': {
-        'eepLinking': True,
-        'isplayOperationId': True,
+        'DeepLinking': True,
+        'DisplayOperationId': True,
     },
 
     'COMPONENT_SPLIT_REQUEST': True,
