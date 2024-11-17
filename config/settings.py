@@ -37,6 +37,7 @@ INSTALLED_APPS += [
 # apps
 INSTALLED_APPS += [
     'api',
+    'common',
     'users',
     'links',
     'link_collections',
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'crum.CurrentRequestUserMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -68,7 +70,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR, 'templates/', ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,6 +125,7 @@ REST_FRAMEWORK = {
     ],
 
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'common.pagination.BasePagination',
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -153,11 +156,11 @@ DJANGO_REST_PASSWORDRESET_TOKEN_CONFIG = {
 }
 # Send e-mail
 EMAIL_BACKEND = ('django.core.mail.backends.smtp.EmailBackend')
-EMAIL_HOST = env.str('EMAIL_HOST')
-EMAIL_HOST_USER = env.str('EMAIL_HOST')
-EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
-EMAIL_PORT = env.int('EMAIL_PORT')
+EMAIL_HOST = env.str('HOST', 'smtp.example.com')
+EMAIL_HOST_USER = env.str('HOST_USER', 'example@example.com')
+EMAIL_HOST_PASSWORD = env.str('HOST_PASSWORD', 'key_for_apps')
+EMAIL_USE_TLS = env.bool('USE_TLS', 'True')
+EMAIL_PORT = env.int('PORT', '587')
 
 
 ######################

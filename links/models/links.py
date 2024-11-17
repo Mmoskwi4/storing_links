@@ -1,12 +1,15 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 
 from config import settings
 from link_collections.models.collection import Collection
 from links.services import get_page_data
 from users.models.users import NULLABLE
+from common.models.mixins import InfoMixin
 
+User = get_user_model()
 
-class Link(models.Model):
+class Link(InfoMixin):
     TYPE_CHOICES = [
         ('website', 'Website'),
         ('book', 'Book'),
@@ -20,11 +23,8 @@ class Link(models.Model):
     url = models.URLField(verbose_name='ссылка на страницу')
     preview = models.ImageField(upload_to='link_previews/', verbose_name='превью ссылки', **NULLABLE)
     type = models.CharField(default='website', max_length=20, choices=TYPE_CHOICES, verbose_name='тип ссылки')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата и время создания')
-    updated_at = models.DateTimeField(auto_now=True, verbose_name='дата и время обновления')
-
     collection = models.ManyToManyField(Collection, related_name='links', verbose_name='коллекция', blank=True)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_links',
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_links',
                               verbose_name='владелец ссылки')
 
     def save(self, *args, **kwargs):

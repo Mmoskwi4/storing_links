@@ -1,15 +1,22 @@
-from django.urls import path
-
-from link_collections.view.collection import CollectionCreateAPIView, CollectionListAPIView, \
-    CollectionRetrieveAPIView, CollectionUpdateAPIView, CollectionDestroyAPIView
+from django.urls import path, include
+from link_collections.view import collection
 from link_collections.apps import LinkCollectionsConfig
+from rest_framework.routers import DefaultRouter
+
 
 app_name = LinkCollectionsConfig.name
 
+router = DefaultRouter()
+
+router.register(r'create-collection', collection.CollectionCreateAPIView, 'create-collection')
+router.register(r'list-collections', collection.CollectionListAPIView, 'list-collections')
+router.register(r'retrieve-collection', collection.CollectionRetrieveAPIView, 'retrieve-collection')
+router.register(r'update-collection', collection.CollectionUpdateAPIView, 'update-collection')
+router.register(r'delete-collection', collection.CollectionDestroyAPIView, 'delete-collection')
+
+
 urlpatterns = [
-    path('create/', CollectionCreateAPIView.as_view(), name='collection-create'),
-    path('collection_list/', CollectionListAPIView.as_view(), name='collection-list'),
-    path('detail/<int:pk>/', CollectionRetrieveAPIView.as_view(), name='collection-detail'),
-    path('update/<int:pk>/', CollectionUpdateAPIView.as_view(), name='collection-update'),
-    path('delete/<int:pk>/', CollectionDestroyAPIView.as_view(), name='collection-delete'),
+
 ]
+
+urlpatterns += path('collections/', include(router.urls)),

@@ -1,29 +1,31 @@
-from rest_framework import generics
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from links.models.links import Link
-from links.paginators import LinkPaginator
 from links.permissions import IsOwner
 from links.serializers.links import LinkSerializer
 from users.permissions import IsSuperUser
 
+from rest_framework import mixins
+from common.views.mixins import ExtendetGenericView
+from common.pagination import BasePagination
+
 @extend_schema_view(
-post=extend_schema(
+create=extend_schema(
         summary='Создание Ссылки', tags=['Передаваемые ссылки для хранения']),
 )
-class LinkCreateAPIView(generics.CreateAPIView):
+class LinkCreateAPIView(ExtendetGenericView, mixins.CreateModelMixin):
     serializer_class = LinkSerializer
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
 @extend_schema_view(
-get=extend_schema(
+list=extend_schema(
         summary='Ссылки', tags=['Передаваемые ссылки для хранения']),
 )
-class LinkListAPIView(generics.ListAPIView):
+class LinkListAPIView(ExtendetGenericView, mixins.ListModelMixin):
     serializer_class = LinkSerializer
     queryset = Link.objects.all()
-    pagination_class = LinkPaginator
+    pagination_class = BasePagination
     permission_classes = [IsOwner | IsSuperUser]
 
     def get_queryset(self):
@@ -32,29 +34,29 @@ class LinkListAPIView(generics.ListAPIView):
         return Link.objects.filter(owner=self.request.user)
 
 @extend_schema_view(
-get=extend_schema(
+retrieve=extend_schema(
         summary='Ссылка', tags=['Передаваемые ссылки для хранения']),
 )
-class LinkRetrieveAPIView(generics.RetrieveAPIView):
+class LinkRetrieveAPIView(ExtendetGenericView, mixins.RetrieveModelMixin):
     serializer_class = LinkSerializer
     queryset = Link.objects.all()
     permission_classes = [IsOwner | IsSuperUser]
 
 @extend_schema_view(
-    patch=extend_schema(
+    update=extend_schema(
         summary='Изменение Ссылки', tags=['Передаваемые ссылки для хранения']),
-    put=extend_schema(
+    partial_update=extend_schema(
         summary='Изменение частично Ссылки', tags=['Передаваемые ссылки для хранения']),
 )
-class LinkUpdateAPIView(generics.UpdateAPIView):
+class LinkUpdateAPIView(ExtendetGenericView, mixins.UpdateModelMixin):
     serializer_class = LinkSerializer
     queryset = Link.objects.all()
     permission_classes = [IsOwner | IsSuperUser]
 
 @extend_schema_view(
-delete=extend_schema(
+destroy=extend_schema(
         summary='Удаление Ссылки', tags=['Передаваемые ссылки для хранения']),
 )
-class LinkDestroyAPIView(generics.DestroyAPIView):
+class LinkDestroyAPIView(ExtendetGenericView, mixins.DestroyModelMixin):
     queryset = Link.objects.all()
     permission_classes = [IsOwner | IsSuperUser]

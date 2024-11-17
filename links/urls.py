@@ -1,15 +1,20 @@
-from django.urls import path
-
-from links.view.links import LinkCreateAPIView, LinkListAPIView, LinkRetrieveAPIView, LinkUpdateAPIView, \
-    LinkDestroyAPIView
+from django.urls import path, include
+from links.view import links
 from links.apps import LinksConfig
+from rest_framework.routers import DefaultRouter
 
 app_name = LinksConfig.name
 
+router = DefaultRouter()
+
+router.register(r'create-collection', links.LinkCreateAPIView, 'create-link')
+router.register(r'list-collections', links.LinkListAPIView, 'list-links')
+router.register(r'retrieve-collection', links.LinkRetrieveAPIView, 'retrieve-link')
+router.register(r'update-collection', links.LinkUpdateAPIView, 'update-link')
+router.register(r'delete-collection', links.LinkDestroyAPIView, 'delete-link')
+
 urlpatterns = [
-    path('create/', LinkCreateAPIView.as_view(), name='link-create'),
-    path('links_list/', LinkListAPIView.as_view(), name='link-list'),
-    path('detail/<int:pk>/', LinkRetrieveAPIView.as_view(), name='link-detail'),
-    path('update/<int:pk>/', LinkUpdateAPIView.as_view(), name='link-update'),
-    path('delete/<int:pk>/', LinkDestroyAPIView.as_view(), name='link-delete'),
+
 ]
+
+urlpatterns += path('links/', include(router.urls)),
